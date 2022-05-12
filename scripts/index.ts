@@ -6,7 +6,7 @@ import { Position } from './types';
 async function main() {
     let epoch = 0;
     while(true) {
-        console.log('epoch :', epoch++);
+        console.log('epoch:', epoch++);
         // state monitoring
         const positions: Array<Position> = readFromHotCache();
         const updatedPositions: Array<Position> = queryStateByPositions(positions);

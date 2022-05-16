@@ -1,4 +1,5 @@
 import { Position } from "./types";
+import { troveManagerContract } from "./init";
 
 // hot cache is the positions that we want to closely look at (at the edge of being liquidated)
 export function readFromHotCache(): Array<Position> {
@@ -14,4 +15,6 @@ export function estimateProfitBeforeGas(position: Position): number {
 export function updateHotCache() {}
 
 // cold cache includes more positions. it's refreshed more infrequently
-export function updateColdCache() {}
+export function updateColdCache() {
+    console.log('troveManagerContract:', troveManagerContract);
+}

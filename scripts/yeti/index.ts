@@ -1,11 +1,14 @@
 import { readFromHotCache, queryStateByPositions, estimateProfitBeforeGas, updateHotCache, updateColdCache } from './stateMonitoring';
 import { getLatestGasPrice, getPreComputedGasUnits } from './profitEvaluation';
 import { getMempoolTxFromLogs, prepareAndOutBidLiquidateTx, sendTx, startMempoolStreaming } from './transactionSubmission';
+import { init } from './init';
 import { Position } from './types';
 
 async function main() {
     let epoch = 0;
-    while(true) {
+    await init();
+    updateColdCache();
+    while(false) {
         updateHotCache();
         console.log('epoch:', epoch++);
         // state monitoring

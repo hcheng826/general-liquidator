@@ -6,6 +6,7 @@ import { Position } from './types';
 async function main() {
     let epoch = 0;
     while(true) {
+        updateHotCache();
         console.log('epoch:', epoch++);
         // state monitoring
         const positions: Array<Position> = readFromHotCache();
@@ -37,8 +38,6 @@ async function main() {
             const liquidateTx = prepareAndOutBidLiquidateTx(position, mempoolTxs);
             sendTx(liquidateTx);
         }
-
-        updateHotCache(updatedPositions);
     }
 }
 

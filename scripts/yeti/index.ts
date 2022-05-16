@@ -7,7 +7,7 @@ import { Position } from './types';
 async function main() {
     let epoch = 0;
     await init();
-    updateColdCache();
+    await updateColdCache();
     while(false) {
         updateHotCache();
         console.log('epoch:', epoch++);
@@ -28,6 +28,7 @@ async function main() {
         let profitablePositions = new Array<Position>();
         for (let position of potentialPositions) {
             const gasUnits = getPreComputedGasUnits(position);
+            // @ts-ignore
             const netProfit = position.profitBeforeGasFromPosition - gasUnits * gasPrice;
             if (netProfit > 0) {
                 position.netProfit = netProfit;
@@ -47,7 +48,7 @@ async function main() {
 startMempoolStreaming();
 main();
 
-setInterval(
-    updateColdCache,
-    300000
-);
+// setInterval(
+//     updateColdCache,
+//     3000
+// );

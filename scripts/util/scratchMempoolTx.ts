@@ -14,12 +14,11 @@ function scratchMempoolTx() {
         .post(AVAX_RPC_URL, reqBody)
         .then(res => {
             console.log(`statusCode: ${res.status}`);
-            console.log(res.data.pending);
+            console.log(JSON.stringify(res.data, null, 2));
         })
         .catch(error => {
             console.error(error);
         });
 }
 
-
-setInterval(scratchMempoolTx, 500)
+setInterval(scratchMempoolTx, 100)

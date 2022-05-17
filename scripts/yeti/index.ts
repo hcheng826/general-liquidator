@@ -59,11 +59,6 @@ startMempoolStreaming();
 main();
 
 setInterval(
-    updateColdAndHotCache,
-    3000
-);
-
-setInterval(
     async () => {
         await updateColdAndHotCache();
         yetiStatus = await getYetiStatus();

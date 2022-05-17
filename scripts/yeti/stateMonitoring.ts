@@ -1,4 +1,4 @@
-import { Position } from './types';
+import { Position, YetiStatus } from './types';
 import { troveManagerContract, hotTrovesWindowSize } from './config';
 import { ethers } from 'ethers';
 import fs from 'fs';
@@ -9,12 +9,18 @@ export function readFromHotCache(): Array<Position> {
     return JSON.parse(troves.toString());
 }
 
-export function estimateProfitBeforeGas(position: Position): number {
+export function estimateProfitBeforeGas(position: Position, yetiStatus: YetiStatus): number {
+    if (!yetiStatus.isRecoveryMode) {
+
+    } else {
+
+    }
     return 0;
 }
 
 export async function updateHotCache(positions: Array<Position>) {
     const trovesPromises = positions.map((position) => {
+        // TODO: filter active troves
         return troveManagerContract.getCurrentICR(position.borrowerAddress).then((ICR: ethers.BigNumber) => {
             return troveManagerContract.getCurrentAICR(position.borrowerAddress).then((AICR: ethers.BigNumber) => {
                 return {
@@ -54,6 +60,7 @@ export async function updateColdAndHotCache() {
 
     for (let i = 0; i < trovesCount; i++) {
         const trovePromise = troveManagerContract.TroveOwners(i).then((troveOwnerAddress: string) => {
+            // TODO: filter active troves
             return troveManagerContract.getCurrentICR(troveOwnerAddress).then((ICR: ethers.BigNumber) => {
                 return troveManagerContract.getCurrentAICR(troveOwnerAddress).then((AICR: ethers.BigNumber) => {
                     return {
@@ -101,4 +108,11 @@ export async function updateColdAndHotCache() {
             })
         )
     );
+}
+
+export async function getYetiStatus(): Promise<YetiStatus> {
+    return {
+        isRecoveryMode: await troveManagerContract.checkRecoveryMode(),
+        TCR: await troveManagerContract.getTCR()
+    };
 }

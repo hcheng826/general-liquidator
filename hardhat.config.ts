@@ -29,6 +29,7 @@ const config: HardhatUserConfig = {
         hardhat: {
             forking: {
                 url: 'https://api.avax.network/ext/bc/C/rpc',
+                blockNumber: 14587843, // liquidate successful tx: https://snowtrace.io/tx/0xa1f0e4eab031128af537a36a3f2101fe6f297fb20f1085cc515446d5812510ca
             },
         },
         ropsten: {

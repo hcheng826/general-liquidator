@@ -5,7 +5,6 @@ import {
     updateColdAndHotCache,
     getYetiStatus,
 } from './stateMonitoring';
-import { getLatestGasPrice, getPreComputedGasUnits } from './profitEvaluation';
 import {
     sendTransaction,
     startMempoolStreaming,

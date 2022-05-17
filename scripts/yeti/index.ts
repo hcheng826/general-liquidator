@@ -7,9 +7,7 @@ import {
 } from './stateMonitoring';
 import { getLatestGasPrice, getPreComputedGasUnits } from './profitEvaluation';
 import {
-    getMempoolTxFromLogs,
-    prepareAndOutBidLiquidateTx,
-    sendTx,
+    sendTransaction,
     startMempoolStreaming,
 } from './transactionSubmission';
 import { init } from './config';
@@ -39,6 +37,7 @@ async function main() {
         }
 
         // net profit evaluation
+        /* NOTE: skip the step for gas estimation given that the 200 YUSD compensation >> gas fee on avalanche C-chain
         const gasPrice = getLatestGasPrice();
         let profitablePositions = new Array<Position>();
         for (let position of potentialPositions) {
@@ -51,13 +50,22 @@ async function main() {
                 profitablePositions.push(position);
             }
         }
+        */
+        let profitablePositions = potentialPositions;
 
         // transaction submission
+        /* NOTE: Yeti allows batch liquidations. The original position-by-position design could be improved
         for (let position of profitablePositions) {
             const mempoolTxs = getMempoolTxFromLogs(position);
             const liquidateTx = prepareAndOutBidLiquidateTx(position, mempoolTxs);
             sendTx(liquidateTx);
         }
+        */
+        // TODO: add mempool optimization
+        // const liquidateTx = prepareAndOutBidLiquidateTx(profitablePositions);
+        sendTransaction(profitablePositions);
+
+        await updateHotCache(positions);
     }
 }
 

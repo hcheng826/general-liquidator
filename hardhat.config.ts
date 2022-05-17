@@ -26,11 +26,19 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 const config: HardhatUserConfig = {
   solidity: "0.8.4",
   networks: {
+    hardhat: {
+      forking: {
+        url: 'https://api.avax.network/ext/bc/C/rpc',
+      }
+    },
     ropsten: {
       url: process.env.ROPSTEN_URL || "",
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
+    avalanche: {
+      url: 'https://api.avax.network/ext/bc/C/rpc',
+    }
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,

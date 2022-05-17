@@ -11,7 +11,7 @@ export function estimateProfitBeforeGas(position: Position): number {
     return 0;
 }
 
-export function updateHotCache(positions: Array<Position>) {}
+export function updateHotCache() {}
 
 // cold cache includes more positions. it's refreshed more infrequently
 export function updateColdCache() {}

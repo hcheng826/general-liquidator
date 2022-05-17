@@ -8,3 +8,8 @@ export type Position = {
     profitBeforeGasFromPosition?: number;
     netProfit?: number;
 };
+
+export type YetiStatus = {
+    isRecoveryMode: boolean;
+    TCR: ethers.BigNumber;
+};

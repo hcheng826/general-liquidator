@@ -1,4 +1,10 @@
-import { readFromHotCache, estimateProfitBeforeGas, updateHotCache, updateColdAndHotCache } from './stateMonitoring';
+import {
+    readFromHotCache,
+    estimateProfitBeforeGas,
+    updateHotCache,
+    updateColdAndHotCache,
+    getYetiStatus,
+} from './stateMonitoring';
 import { getLatestGasPrice, getPreComputedGasUnits } from './profitEvaluation';
 import {
     getMempoolTxFromLogs,
@@ -7,20 +13,25 @@ import {
     startMempoolStreaming,
 } from './transactionSubmission';
 import { init } from './config';
-import { Position } from './types';
+import { Position, YetiStatus } from './types';
+
+let yetiStatus: YetiStatus;
+let positions: Array<Position>;
 
 async function main() {
     let epoch = 0;
     await init();
     await updateColdAndHotCache();
+    yetiStatus = await getYetiStatus();
+    positions = readFromHotCache();
     while (true) {
         console.log('epoch:', epoch++);
 
         // state monitoring
-        const positions: Array<Position> = readFromHotCache();
+        positions = await updateHotCache(positions);
         let potentialPositions = new Array<Position>();
         for (let position of positions) {
-            const profitBeforeGasFromPosition = estimateProfitBeforeGas(position);
+            const profitBeforeGasFromPosition = estimateProfitBeforeGas(position, yetiStatus);
             if (profitBeforeGasFromPosition > 0) {
                 position.profitBeforeGasFromPosition = profitBeforeGasFromPosition;
                 potentialPositions.push(position);
@@ -47,15 +58,14 @@ async function main() {
             const liquidateTx = prepareAndOutBidLiquidateTx(position, mempoolTxs);
             sendTx(liquidateTx);
         }
-
-        await updateHotCache(positions);
     }
 }
 
 startMempoolStreaming();
 main();
 
-// setInterval(
-//     updateColdCache,
-//     3000
-// );
+setInterval(async () => {
+    await updateColdAndHotCache();
+    yetiStatus = await getYetiStatus();
+    positions = readFromHotCache();
+}, 3000);

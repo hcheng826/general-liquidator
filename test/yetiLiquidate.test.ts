@@ -12,7 +12,7 @@ import { Position } from '../scripts/yeti/types';
 import { init } from '../scripts/yeti/config';
 import erc20Abi from './ERC20.abi.json';
 
-describe('Yeti liquidation bot', () => {
+describe('Yeti liquidation', () => {
     let account: any;
     let troveManagerContract: any;
     const troveManagerAddress = '0x000000000000614c27530d24B5f039EC15A61d8d'; // proxy

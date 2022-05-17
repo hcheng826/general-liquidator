@@ -1,11 +1,22 @@
-import { readFromHotCache, queryStateByPositions, estimateProfitBeforeGas, updateHotCache, updateColdCache } from './stateMonitoring';
+import {
+    readFromHotCache,
+    queryStateByPositions,
+    estimateProfitBeforeGas,
+    updateHotCache,
+    updateColdCache,
+} from './stateMonitoring';
 import { getLatestGasPrice, getPreComputedGasUnits } from './profitEvaluation';
-import { getMempoolTxFromLogs, prepareAndOutBidLiquidateTx, sendTx, startMempoolStreaming } from './transactionSubmission';
+import {
+    getMempoolTxFromLogs,
+    prepareAndOutBidLiquidateTx,
+    sendTx,
+    startMempoolStreaming,
+} from './transactionSubmission';
 import { Position } from './types';
 
 async function main() {
     let epoch = 0;
-    while(true) {
+    while (true) {
         updateHotCache();
         console.log('epoch:', epoch++);
         // state monitoring
@@ -44,7 +55,4 @@ async function main() {
 startMempoolStreaming();
 main();
 
-setInterval(
-    updateColdCache,
-    300000
-);
+setInterval(updateColdCache, 300000);

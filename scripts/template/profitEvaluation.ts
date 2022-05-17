@@ -1,4 +1,4 @@
-import { Position } from "./types";
+import { Position } from './types';
 
 export function getLatestGasPrice(): number {
     return 0;
@@ -6,4 +6,3 @@ export function getLatestGasPrice(): number {
 export function getPreComputedGasUnits(position: Position): number {
     return 0;
 }
-

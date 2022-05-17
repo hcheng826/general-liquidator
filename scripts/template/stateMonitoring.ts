@@ -1,4 +1,4 @@
-import { Position } from "./types";
+import { Position } from './types';
 
 // hot cache is the positions that we want to closely look at (at the edge of being liquidated)
 export function readFromHotCache(): Array<Position> {

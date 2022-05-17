@@ -1,6 +1,11 @@
 import { readFromHotCache, estimateProfitBeforeGas, updateHotCache, updateColdAndHotCache } from './stateMonitoring';
 import { getLatestGasPrice, getPreComputedGasUnits } from './profitEvaluation';
-import { getMempoolTxFromLogs, prepareAndOutBidLiquidateTx, sendTx, startMempoolStreaming } from './transactionSubmission';
+import {
+    getMempoolTxFromLogs,
+    prepareAndOutBidLiquidateTx,
+    sendTx,
+    startMempoolStreaming,
+} from './transactionSubmission';
 import { init } from './config';
 import { Position } from './types';
 
@@ -8,7 +13,7 @@ async function main() {
     let epoch = 0;
     await init();
     await updateColdAndHotCache();
-    while(true) {
+    while (true) {
         console.log('epoch:', epoch++);
 
         // state monitoring
@@ -27,8 +32,9 @@ async function main() {
         let profitablePositions = new Array<Position>();
         for (let position of potentialPositions) {
             const gasUnits = getPreComputedGasUnits(position);
-            // @ts-ignore
-            const netProfit = position.profitBeforeGasFromPosition - gasUnits * gasPrice;
+            const netProfit =
+                // @ts-ignore
+                position.profitBeforeGasFromPosition - gasUnits * gasPrice;
             if (netProfit > 0) {
                 position.netProfit = netProfit;
                 profitablePositions.push(position);

@@ -1,6 +1,6 @@
-import { Position } from "./types";
-import { troveManagerContract, hotTrovesWindowSize } from "./config";
-import { ethers } from "ethers";
+import { Position } from './types';
+import { troveManagerContract, hotTrovesWindowSize } from './config';
+import { ethers } from 'ethers';
 import fs from 'fs';
 
 // hot cache is the positions that we want to closely look at (at the edge of being liquidated)
@@ -20,7 +20,7 @@ export async function updateHotCache(positions: Array<Position>) {
                 return {
                     borrowerAddress: position.borrowerAddress,
                     ICR,
-                    AICR
+                    AICR,
                 };
             });
         });
@@ -31,15 +31,20 @@ export async function updateHotCache(positions: Array<Position>) {
         return a.ICR.gt(b.ICR) ? 1 : -1;
     });
 
-    fs.writeFileSync('./scripts/yeti/cache/hotTroves.json', JSON.stringify(troves.slice(0, hotTrovesWindowSize).map(trove => {
-        return {
-            borrowerAddress: trove.borrowerAddress,
-            // @ts-ignore
-            ICR: trove.ICR.toString()/1e18,
-            // @ts-ignore
-            AICR: trove.AICR.toString()/1e18,
-        }
-    })));
+    fs.writeFileSync(
+        './scripts/yeti/cache/hotTroves.json',
+        JSON.stringify(
+            troves.slice(0, hotTrovesWindowSize).map((trove) => {
+                return {
+                    borrowerAddress: trove.borrowerAddress,
+                    // @ts-ignore
+                    ICR: trove.ICR.toString() / 1e18,
+                    // @ts-ignore
+                    AICR: trove.AICR.toString() / 1e18,
+                };
+            })
+        )
+    );
 }
 
 // cold cache includes more positions. it's refreshed more infrequently
@@ -54,7 +59,7 @@ export async function updateColdAndHotCache() {
                     return {
                         borrowerAddress: troveOwnerAddress,
                         ICR,
-                        AICR
+                        AICR,
                     };
                 });
             });
@@ -67,23 +72,33 @@ export async function updateColdAndHotCache() {
         return a.ICR.gt(b.ICR) ? 1 : -1;
     });
 
-    fs.writeFileSync('./scripts/yeti/cache/allTroves.json', JSON.stringify(troves.map(trove => {
-        return {
-            borrowerAddress: trove.borrowerAddress,
-            // @ts-ignore
-            ICR: trove.ICR.toString()/1e18,
-            // @ts-ignore
-            AICR: trove.AICR.toString()/1e18,
-        }
-    })));
+    fs.writeFileSync(
+        './scripts/yeti/cache/allTroves.json',
+        JSON.stringify(
+            troves.map((trove) => {
+                return {
+                    borrowerAddress: trove.borrowerAddress,
+                    // @ts-ignore
+                    ICR: trove.ICR.toString() / 1e18,
+                    // @ts-ignore
+                    AICR: trove.AICR.toString() / 1e18,
+                };
+            })
+        )
+    );
 
-    fs.writeFileSync('./scripts/yeti/cache/hotTroves.json', JSON.stringify(troves.slice(0, hotTrovesWindowSize).map(trove => {
-        return {
-            borrowerAddress: trove.borrowerAddress,
-            // @ts-ignore
-            ICR: trove.ICR.toString()/1e18,
-            // @ts-ignore
-            AICR: trove.AICR.toString()/1e18,
-        }
-    })));
+    fs.writeFileSync(
+        './scripts/yeti/cache/hotTroves.json',
+        JSON.stringify(
+            troves.slice(0, hotTrovesWindowSize).map((trove) => {
+                return {
+                    borrowerAddress: trove.borrowerAddress,
+                    // @ts-ignore
+                    ICR: trove.ICR.toString() / 1e18,
+                    // @ts-ignore
+                    AICR: trove.AICR.toString() / 1e18,
+                };
+            })
+        )
+    );
 }

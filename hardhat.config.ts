@@ -37,6 +37,7 @@ const config: HardhatUserConfig = {
         },
         avalanche: {
             url: 'https://api.avax.network/ext/bc/C/rpc',
+            accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
         },
     },
     gasReporter: {

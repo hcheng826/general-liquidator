@@ -32,6 +32,10 @@ async function main() {
             }
         }
 
+        if (potentialPositions.length === 0) {
+            continue;
+        }
+
         // net profit evaluation
         /* NOTE: skip the step for gas estimation given that the 200 YUSD compensation >> gas fee on avalanche C-chain
         const gasPrice = getLatestGasPrice();
@@ -47,7 +51,7 @@ async function main() {
             }
         }
         */
-        let profitablePositions = potentialPositions;
+        const profitablePositions = potentialPositions;
 
         // transaction submission
         /* NOTE: Yeti allows batch liquidations. The original position-by-position design could be improved
@@ -59,9 +63,7 @@ async function main() {
         */
         // TODO: add mempool optimization
         // const liquidateTx = prepareAndOutBidLiquidateTx(profitablePositions);
-        sendTransaction(profitablePositions);
-
-        await updateHotCache(positions);
+        await sendTransaction(profitablePositions);
     }
 }
 

@@ -5,10 +5,7 @@ import {
     updateColdAndHotCache,
     getYetiStatus,
 } from './stateMonitoring';
-import {
-    sendTransaction,
-    startMempoolStreaming,
-} from './transactionSubmission';
+import { sendTransaction, startMempoolStreaming } from './transactionSubmission';
 import { init } from './config';
 import { Position, YetiStatus } from './types';
 

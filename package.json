@@ -3,6 +3,7 @@
         "@nomiclabs/hardhat-ethers": "^2.0.6",
         "@nomiclabs/hardhat-etherscan": "^3.0.3",
         "@nomiclabs/hardhat-waffle": "^2.0.3",
+        "@types/mocha": "^9.1.1",
         "@typescript-eslint/eslint-plugin": "^5.22.0",
         "@typescript-eslint/parser": "^5.22.0",
         "dotenv": "^16.0.1",

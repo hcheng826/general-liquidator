@@ -12,7 +12,7 @@ export async function sendTransaction(positions: Array<Position>, mempoolTxs?: a
         await troveManagerContract.signer.getAddress()
     );
     batchLiquidateTrovesTxRes.wait().then((rc: ethers.ContractReceipt) => {
-        console.log(rc.transactionHash);
+        console.log('liquidate tx hash:', rc.transactionHash);
     });
 }
 

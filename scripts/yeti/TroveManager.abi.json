@@ -17,31 +17,6 @@
         "inputs": [
             {
                 "indexed": false,
-                "internalType": "address",
-                "name": "_Coll_Address",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "_L_Coll",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "_L_YUSDDebt",
-                "type": "uint256"
-            }
-        ],
-        "name": "LTermsUpdated",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
                 "internalType": "uint256",
                 "name": "_L_ETH",
                 "type": "uint256"
@@ -155,19 +130,6 @@
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "_unix",
-                "type": "uint256"
-            }
-        ],
-        "name": "SystemSnapshotsUpdated",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "internalType": "uint256",
                 "name": "_totalStakesSnapshot",
                 "type": "uint256"
             },
@@ -248,19 +210,6 @@
             }
         ],
         "name": "TroveLiquidated",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "_unix",
-                "type": "uint256"
-            }
-        ],
-        "name": "TroveSnapshotsUpdated",
         "type": "event"
     },
     {

@@ -10,17 +10,19 @@ import { init } from './config';
 import { Position, YetiStatus } from './types';
 
 let yetiStatus: YetiStatus;
+let positions: Array<Position>;
 
 async function main() {
     let epoch = 0;
     await init();
     await updateColdAndHotCache();
     yetiStatus = await getYetiStatus();
+    positions = readFromHotCache();
     while (true) {
         console.log('epoch:', epoch++);
 
         // state monitoring
-        const positions: Array<Position> = readFromHotCache();
+        positions = await updateHotCache(positions);
         let potentialPositions = new Array<Position>();
         for (let position of positions) {
             const profitBeforeGasFromPosition = estimateProfitBeforeGas(position, yetiStatus);
@@ -50,8 +52,6 @@ async function main() {
             const liquidateTx = prepareAndOutBidLiquidateTx(position, mempoolTxs);
             sendTx(liquidateTx);
         }
-
-        await updateHotCache(positions);
     }
 }
 
@@ -64,6 +64,10 @@ setInterval(
 );
 
 setInterval(
-    async () => { yetiStatus = await getYetiStatus(); },
+    async () => {
+        await updateColdAndHotCache();
+        yetiStatus = await getYetiStatus();
+        positions = readFromHotCache();
+    },
     3000
 );

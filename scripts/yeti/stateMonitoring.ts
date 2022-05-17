@@ -36,7 +36,7 @@ export function estimateProfitBeforeGas(position: Position, yetiStatus: YetiStat
 }
 
 export async function updateHotCache(positions: Array<Position>): Promise<Array<Position>> {
-    const positionsPromises = positions.map((position) => {
+    const newPositionsPromises = positions.map((position) => {
         return troveManagerContract.isTroveActive(position.borrowerAddress).then((isActive: boolean) => {
             if (!isActive) { return null; }
             return troveManagerContract.getCurrentICR(position.borrowerAddress).then((ICR: ethers.BigNumber) => {
@@ -51,7 +51,7 @@ export async function updateHotCache(positions: Array<Position>): Promise<Array<
         });
     });
 
-    const newPositions = (await Promise.all(positionsPromises)).filter(Boolean); // remove null
+    const newPositions = (await Promise.all(newPositionsPromises)).filter(Boolean); // remove null
     newPositions.sort((a, b) => {
         return a.ICR.gt(b.ICR) ? 1 : -1;
     });

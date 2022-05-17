@@ -1,5 +1,5 @@
 import { Position, YetiStatus } from './types';
-import { troveManagerContract, hotTrovesWindowSize } from './config';
+import { troveManagerContract, hotTrovesWindowSize, MCR, gasCompensation } from './config';
 import { ethers } from 'ethers';
 import fs from 'fs';
 
@@ -18,15 +18,21 @@ export function readFromHotCache(): Array<Position> {
     return troves;
 }
 
+// TODO: include the 0.5% collateral value
 export function estimateProfitBeforeGas(position: Position, yetiStatus: YetiStatus): number {
-    if (!yetiStatus.isRecoveryMode) {
-        // console.log(position);
-        // if (position.ICR.lt(1.11e18)) {
-        //     console.log('liquidatable!!');
-        // }
-    } else {
+    // liquidation condition: https://techdocs.yeti.finance/how-does-yeti-finance-work/recovery-mode#what-is-recovery-mode
+    // in both normal mode and recovery mode, liquidation condition is ICR < MCR
+    if (position.ICR.lt(MCR)) {
+        return gasCompensation;
     }
-    return 0;
+
+    if (yetiStatus.isRecoveryMode) {
+        // in recovery mode, liquidation condition is AICR < TCR
+        if (position.AICR.lt(yetiStatus.TCR)) {
+            return gasCompensation;
+        }
+    }
+    return 0
 }
 
 export async function updateHotCache(positions: Array<Position>): Promise<Array<Position>> {

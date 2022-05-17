@@ -1,21 +1,20 @@
-import { readFromHotCache, queryStateByPositions, estimateProfitBeforeGas, updateHotCache, updateColdCache } from './stateMonitoring';
+import { readFromHotCache, estimateProfitBeforeGas, updateHotCache, updateColdAndHotCache } from './stateMonitoring';
 import { getLatestGasPrice, getPreComputedGasUnits } from './profitEvaluation';
 import { getMempoolTxFromLogs, prepareAndOutBidLiquidateTx, sendTx, startMempoolStreaming } from './transactionSubmission';
-import { init } from './init';
+import { init } from './config';
 import { Position } from './types';
 
 async function main() {
     let epoch = 0;
     await init();
-    await updateColdCache();
-    while(false) {
-        updateHotCache();
+    await updateColdAndHotCache();
+    while(true) {
         console.log('epoch:', epoch++);
+
         // state monitoring
         const positions: Array<Position> = readFromHotCache();
-        const updatedPositions: Array<Position> = queryStateByPositions(positions);
         let potentialPositions = new Array<Position>();
-        for (let position of updatedPositions) {
+        for (let position of positions) {
             const profitBeforeGasFromPosition = estimateProfitBeforeGas(position);
             if (profitBeforeGasFromPosition > 0) {
                 position.profitBeforeGasFromPosition = profitBeforeGasFromPosition;
@@ -42,6 +41,8 @@ async function main() {
             const liquidateTx = prepareAndOutBidLiquidateTx(position, mempoolTxs);
             sendTx(liquidateTx);
         }
+
+        await updateHotCache(positions);
     }
 }
 

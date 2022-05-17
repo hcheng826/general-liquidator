@@ -1,4 +1,10 @@
-import { readFromHotCache, estimateProfitBeforeGas, updateHotCache, updateColdAndHotCache, getYetiStatus } from './stateMonitoring';
+import {
+    readFromHotCache,
+    estimateProfitBeforeGas,
+    updateHotCache,
+    updateColdAndHotCache,
+    getYetiStatus,
+} from './stateMonitoring';
 import { getLatestGasPrice, getPreComputedGasUnits } from './profitEvaluation';
 import {
     getMempoolTxFromLogs,
@@ -58,11 +64,8 @@ async function main() {
 startMempoolStreaming();
 main();
 
-setInterval(
-    async () => {
-        await updateColdAndHotCache();
-        yetiStatus = await getYetiStatus();
-        positions = readFromHotCache();
-    },
-    3000
-);
+setInterval(async () => {
+    await updateColdAndHotCache();
+    yetiStatus = await getYetiStatus();
+    positions = readFromHotCache();
+}, 3000);

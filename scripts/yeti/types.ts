@@ -12,4 +12,4 @@ export type Position = {
 export type YetiStatus = {
     isRecoveryMode: boolean;
     TCR: ethers.BigNumber;
-}
+};

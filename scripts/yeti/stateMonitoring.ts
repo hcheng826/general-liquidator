@@ -12,7 +12,7 @@ export function readFromHotCache(): Array<Position> {
         return {
             borrowerAddress: trove.borrowerAddress,
             ICR,
-            AICR
+            AICR,
         };
     });
     return troves;
@@ -32,13 +32,15 @@ export function estimateProfitBeforeGas(position: Position, yetiStatus: YetiStat
             return gasCompensation;
         }
     }
-    return 0
+    return 0;
 }
 
 export async function updateHotCache(positions: Array<Position>): Promise<Array<Position>> {
     const newPositionsPromises = positions.map((position) => {
         return troveManagerContract.isTroveActive(position.borrowerAddress).then((isActive: boolean) => {
-            if (!isActive) { return null; }
+            if (!isActive) {
+                return null;
+            }
             return troveManagerContract.getCurrentICR(position.borrowerAddress).then((ICR: ethers.BigNumber) => {
                 return troveManagerContract.getCurrentAICR(position.borrowerAddress).then((AICR: ethers.BigNumber) => {
                     return {
@@ -67,7 +69,9 @@ export async function updateColdAndHotCache() {
     for (let i = 0; i < trovesCount; i++) {
         const trovePromise = troveManagerContract.TroveOwners(i).then((troveOwnerAddress: string) => {
             return troveManagerContract.isTroveActive(troveOwnerAddress).then((isActive: boolean) => {
-                if (!isActive) { return null; }
+                if (!isActive) {
+                    return null;
+                }
                 return troveManagerContract.getCurrentICR(troveOwnerAddress).then((ICR: ethers.BigNumber) => {
                     return troveManagerContract.getCurrentAICR(troveOwnerAddress).then((AICR: ethers.BigNumber) => {
                         return {
@@ -118,6 +122,6 @@ export async function updateColdAndHotCache() {
 export async function getYetiStatus(): Promise<YetiStatus> {
     return {
         isRecoveryMode: await troveManagerContract.checkRecoveryMode(),
-        TCR: await troveManagerContract.getTCR()
+        TCR: await troveManagerContract.getTCR(),
     };
 }

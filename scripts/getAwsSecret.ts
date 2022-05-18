@@ -3,15 +3,17 @@
 // https://aws.amazon.com/developers/getting-started/nodejs/
 
 // Load the AWS SDK
-var AWS = require('aws-sdk'),
+let AWS = require('aws-sdk'),
     region = "ap-northeast-1",
     secretName = "arn:aws:secretsmanager:ap-northeast-1:422440744886:secret:hung_test_private_key-E2d4qP",
-    secret,
-    decodedBinarySecret;
+    secret: string,
+    decodedBinarySecret: string;
 
 // Create a Secrets Manager client
-var client = new AWS.SecretsManager({
-    region: region
+const client = new AWS.SecretsManager({
+    region: region,
+    accessKeyId: 'AKIAWEW3OG63MTQTCPUU',
+    secretAccessKey: 'I73DKuw8afJG1IQnhrsqiOCFvGewqS2xulQTPW60'
 });
 
 // In this sample we only handle the specific exceptions for the 'GetSecretValue' API.
@@ -55,5 +57,6 @@ client.getSecretValue({SecretId: secretName}, function(err: any, data: any) {
     // Your code goes here.
 });
 
-console.log(secret);
-console.log(decodedBinarySecret);
+export function getAwsSecret() {
+    return JSON.parse(secret)["HUNG_TEST_PRIVATE_KEY"];
+}

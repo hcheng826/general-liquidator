@@ -1,5 +1,4 @@
 import * as dotenv from 'dotenv';
-import { getAwsSecret } from './scripts/getAwsSecret';
 
 import { HardhatUserConfig, task } from 'hardhat/config';
 import '@nomiclabs/hardhat-ethers';
@@ -39,7 +38,7 @@ const config: HardhatUserConfig = {
         },
         avalanche: {
             url: 'https://api.avax.network/ext/bc/C/rpc',
-            accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [getAwsSecret()],
+            accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
         },
     },
     gasReporter: {

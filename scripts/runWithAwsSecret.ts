@@ -2,6 +2,8 @@
 // If you need more information about configurations or implementing the sample code, visit the AWS docs:
 // https://aws.amazon.com/developers/getting-started/nodejs/
 
+import { spawn } from "child_process";
+
 // Load the AWS SDK
 let AWS = require('aws-sdk'),
     region = "ap-northeast-1",
@@ -55,8 +57,9 @@ client.getSecretValue({SecretId: secretName}, function(err: any, data: any) {
     }
 
     // Your code goes here.
+    const privateKey = JSON.parse(secret)["HUNG_TEST_PRIVATE_KEY"];
+    const spawnProcess = spawn(`PRIVATE_KEY=${privateKey} npx hardhat run scripts/yeti/index.ts --network avalanche`);
+    spawnProcess.stdout.on('data', (data) => {
+        console.log(data);
+    })
 });
-
-export function getAwsSecret() {
-    return JSON.parse(secret)["HUNG_TEST_PRIVATE_KEY"];
-}

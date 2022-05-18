@@ -42,6 +42,7 @@ export async function main() {
         }
 
         if (potentialPositions.length === 0) {
+            console.log('liquidation opportunity detected!');
             continue;
         }
 

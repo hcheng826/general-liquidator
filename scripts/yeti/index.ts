@@ -5,17 +5,26 @@ import {
     updateColdAndHotCache,
     getYetiStatus,
 } from './stateMonitoring';
-import { sendTransaction, startMempoolStreaming } from './transactionSubmission';
+import { sendTransaction } from './transactionSubmission';
 import { init } from './config';
 import { Position, YetiStatus } from './types';
 
-let yetiStatus: YetiStatus;
-let positions: Array<Position>;
-
-async function main() {
-    let epoch = 0;
+export async function main() {
     await init();
     await updateColdAndHotCache();
+
+    let yetiStatus: YetiStatus;
+    let positions: Array<Position>;
+    let epoch = 0;
+    let setIntervalCount = 0;
+
+    setInterval(async () => {
+        console.log('setIntervalCount', setIntervalCount++);
+        await updateColdAndHotCache();
+        yetiStatus = await getYetiStatus();
+        positions = readFromHotCache();
+    }, 10000);
+
     yetiStatus = await getYetiStatus();
     positions = readFromHotCache();
     while (true) {
@@ -35,6 +44,7 @@ async function main() {
         if (potentialPositions.length === 0) {
             continue;
         }
+        console.log('liquidation opportunity detected!');
 
         // net profit evaluation
         /* NOTE: skip the step for gas estimation given that the 200 YUSD compensation >> gas fee on avalanche C-chain
@@ -67,11 +77,4 @@ async function main() {
     }
 }
 
-startMempoolStreaming();
 main();
-
-setInterval(async () => {
-    await updateColdAndHotCache();
-    yetiStatus = await getYetiStatus();
-    positions = readFromHotCache();
-}, 3000);

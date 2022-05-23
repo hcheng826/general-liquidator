@@ -42,9 +42,9 @@ export async function main() {
         }
 
         if (potentialPositions.length === 0) {
-            console.log('liquidation opportunity detected!');
             continue;
         }
+        console.log('liquidation opportunity detected!');
 
         // net profit evaluation
         /* NOTE: skip the step for gas estimation given that the 200 YUSD compensation >> gas fee on avalanche C-chain

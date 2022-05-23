@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import fs from 'fs';
 
 // hot cache is the positions that we want to closely look at (at the edge of being liquidated)
-export function readFromHotCache(cachePath: string = './scripts/yeti/cache/'): Array<Position> {
+export function readFromHotCache(cachePath: string = './scripts/yeti/'): Array<Position> {
     const trovesString = fs.readFileSync(`${cachePath}/hotTroves.json`);
     const troves = JSON.parse(trovesString.toString()).map((trove: any) => {
         const ICR = ethers.BigNumber.from(trove.ICR);
@@ -62,7 +62,7 @@ export async function updateHotCache(positions: Array<Position>): Promise<Array<
 }
 
 // cold cache includes more positions. it's refreshed more infrequently
-export async function updateColdAndHotCache(cachePath: string = './scripts/yeti/cache/') {
+export async function updateColdAndHotCache(cachePath: string = './scripts/yeti/') {
     const trovesCount = (await troveManagerContract.getTroveOwnersCount()).toNumber();
     let trovesPromises: Array<Promise<Position>> = new Array<Promise<Position>>();
 
